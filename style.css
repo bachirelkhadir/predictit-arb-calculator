@@ -62,3 +62,19 @@ button {
 #marketid {
     width: 10%;
 }
+
+#listcontracts {
+    max-height: 300px;
+    overflow: auto;
+    display: block;
+}
+#listcontracts table {
+   width: 100%;
+}
+
+/* Fix table head */
+#listcontracts .sticky {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}

@@ -29,26 +29,27 @@
 
         <h2>{{market_title}} </h2>
         <a v-bind:href="market_url">predictit</a>
+        <div id="listcontracts">
+            <table  class="pure-table pure-table-striped" >
+                <thead class="sticky">
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Optimal # of Shares</th>
+                    </tr>
+                </thead>
 
-        <table class="pure-table pure-table-striped" >
-        <thead>
-          <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Optimal # of Shares</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr v-for="item in contracts" :key="item.contractId">
-            <td><img v-bind:src=item.contractImageSmallUrl width="50px" /></td>
-            <td>{{item.contractName}}</td>
-            <td>{{item.bestNoPrice * 100}}c</td>
-            <td><input type="range"  min="1" max="30" v-model:value="item.x" class="slider"> {{ item.x }} </td>
-          </tr>
-        </tbody>
-      </table>
+                <tbody >
+                    <tr v-for="item in contracts" :key="item.contractId">
+                        <td><img v-bind:src=item.contractImageSmallUrl width="50px" /></td>
+                        <td>{{item.contractName}}</td>
+                        <td>{{item.bestNoPrice * 100}}c</td>
+                        <td><input type="range"  min="1" max="100" v-model:value="item.x" class="slider"> {{ item.x }} </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
 
 
