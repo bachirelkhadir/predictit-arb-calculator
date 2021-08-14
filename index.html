@@ -29,6 +29,7 @@
 
         <h2>{{market_title}} </h2>
         <a v-bind:href="market_url">predictit</a>
+
         <table class="pure-table pure-table-striped" >
         <thead>
           <tr>
@@ -70,6 +71,24 @@
         </tbody>
       </table>
 
+
+
+     <h2> </h2>
+      <table class="pure-table pure-table-striped" >
+        <thead>
+          <tr>
+            <th>Top Markets</th>
+            <th>Profit</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr v-for="item in top_markets" :key="top_markets.market_id">
+            <td> <a v-bind:href=item.market_url>{{ item.market_id }}</a> </td>
+            <td> {{ item.profit.profit | round }} </td>
+            </tr>
+          </tbody>
+        </table>
     </div>
     </div>
   </div>
@@ -84,6 +103,7 @@
             market_url: '#',
             profit: 0,
             contracts: {},
+            top_markets: [],
             // data for calculator
             fields: [
                 {'p': 87, 'x': 10},
@@ -100,11 +120,16 @@
                 
                 url = "https://j4ukttnu2g.execute-api.us-east-2.amazonaws.com/default/predictit-market-info"
                 this.$http.get(url).then(response => {
-                     r = response.body
+                    r = response.body
                     console.log("Most profitable market:")
-                    console.log(r['market_id'])
-                    console.log(r['info'])
-                    this.marketid = r['market_id']
+                    console.log(r[0])
+                    this.marketid = r[0]['market_id']
+                    this.top_markets = r
+
+                    for(let market of this.top_markets) {
+                        market.market_url =  "https://www.predictit.org/markets/detail/" + market['market_id'] 
+                    }
+                    this.market_url = "https://www.predictit.org/markets/detail/" + app.contracts[0]['marketId'] 
                     var button = this.$refs.getmarket
                     button.click()
                 })
@@ -118,7 +143,7 @@
                     this.contracts = response.body
                     console.log(response.body)
                     this.market_title = app.contracts[0]['marketName']
-                    this.market_url = "https://www.predictit.org/markets/detail/" +                     app.contracts[0]['marketId'] 
+                    this.market_url = "https://www.predictit.org/markets/detail/" + app.contracts[0]['marketId'] 
                     this.profit = app.contracts[0]['profit']
                     console.log(this.contracts[0])
                 })
