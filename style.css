@@ -78,3 +78,19 @@ button {
     top: 0;
     z-index: 1;
 }
+
+#lastupdated {
+    color: #848484;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.positivepayoff {
+  font-weight: bold;
+  color: #47a447;
+}
+
+.negativepayoff {
+  font-weight: bold;
+  color: #d9534f;
+}

@@ -7,6 +7,7 @@
   <title>Predictit Arbitrage Helper</title>
   <script src="vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.3"></script>
+  <script src="https://momentjs.com/downloads/moment.min.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/base-min.css">
   <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css" integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5" crossorigin="anonymous">
   <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/grids-responsive-min.css" />
@@ -29,6 +30,8 @@
 
         <h2>{{market_title}} </h2>
         <a v-bind:href="market_url">predictit</a>
+
+        <div id="lastupdated">Time since update: {{time_since_update}}</div>
         <div id="listcontracts">
             <table  class="pure-table pure-table-striped" >
                 <thead class="sticky">
@@ -67,7 +70,7 @@
           <tr>
             <td> {{ calculated_investment | round }}$
             <td> {{ calculated_worst_payoff | round }}$
-            <td> {{ calculated_min_payoff | round }}$
+            <td><span v-bind:class="{positivepayoff: (calculated_min_payoff > 0), negativepayoff: (calculated_min_payoff < 0)}"> {{ calculated_min_payoff | round }}</span>$</td>
           </tr>
         </tbody>
       </table>
@@ -105,6 +108,8 @@
             profit: 0,
             contracts: {},
             top_markets: [],
+            time_last_update: 'never',
+            time_since_update: 'NA',
             // data for calculator
             fields: [
                 {'p': 87, 'x': 10},
@@ -117,6 +122,10 @@
             calculated_min_payoff: 0,
         }, //data
         methods: {
+            refreshTime: function() {
+                this.time_last_update = moment()
+                this.time_since_update = moment(this.time_last_update).fromNow()
+            },
             getBest: function() {
                 
                 url = "https://j4ukttnu2g.execute-api.us-east-2.amazonaws.com/default/predictit-market-info"
@@ -147,6 +156,7 @@
                     this.market_url = "https://www.predictit.org/markets/detail/" + app.contracts[0]['marketId'] 
                     this.profit = app.contracts[0]['profit']
                     console.log(this.contracts[0])
+                    this.refreshTime()
                 })
             },
             addContract: function() {
@@ -198,6 +208,12 @@
                 var button = this.$refs.getmarket
                 button.click()
                 console.log("tick")
+                var self = this;
+
+                setInterval(function() {
+                    self.time_since_update = moment(this.time_last_update).fromNow()
+                }, 10000);
+
             })
         } //created
     })
