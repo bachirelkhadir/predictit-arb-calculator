@@ -4,7 +4,7 @@
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
   <meta content="utf-8" http-equiv="encoding">
 
-  <title>My first Vue app</title>
+  <title>Predictit Arbitrage Helper</title>
   <script src="vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.3"></script>
   <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/base-min.css">
@@ -27,7 +27,8 @@
         <button  v-on:click="getMarket" ref="getmarket" class="pure-button pure-button-primary" >Get Market {{marketid}}</button>
         <button  v-on:click="getBest" ref="getbest" class="pure-button pure-button-primary" >Get Most Profitable Market</button>
 
-        <h2>{{market_title}}</h2>
+        <h2>{{market_title}} </h2>
+        <a v-bind:href="market_url">predictit</a>
         <table class="pure-table pure-table-striped" >
         <thead>
           <tr>
@@ -80,6 +81,7 @@
         data: {
             marketid: '7024',
             market_title: 'Market information will appear here after you click',
+            market_url: '#',
             profit: 0,
             contracts: {},
             // data for calculator
@@ -114,7 +116,9 @@
 
                 this.$http.get(url).then(response => {
                     this.contracts = response.body
+                    console.log(response.body)
                     this.market_title = app.contracts[0]['marketName']
+                    this.market_url = "https://www.predictit.org/markets/detail/" +                     app.contracts[0]['marketId'] 
                     this.profit = app.contracts[0]['profit']
                     console.log(this.contracts[0])
                 })
